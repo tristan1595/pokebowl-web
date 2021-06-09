@@ -60,10 +60,10 @@ public class UtilisateurRestController {
 		
 		utilisateur = utilisateurRepo.save(utilisateur);
 		
-		return utilisateur;
+		return utilisateur;  
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/id}{")
 	@JsonView(Views.ViewUtilisateur.class)
 	public Utilisateur update(@RequestBody Utilisateur utilisateur, @PathVariable Long id) {
 		if (!utilisateurRepo.existsById(id)) {
@@ -74,6 +74,19 @@ public class UtilisateurRestController {
 		
 		return utilisateur;
 	}
+	
+//	@GetMapping("/{id}/profil")
+//	@JsonView(Views.ViewUtilisateurDetail.class)
+//	public Utilisateur findUtilisateurAllInfo(@Valid @RequestBody Utilisateur utilisateur, BindingResult result, @PathVariable Long id) {
+//		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findUtilisateurByIdWithEquipesSauvegardeesAndStatistique(id);
+//		
+//		if(optUtilisateur.isPresent()) {
+//			return optUtilisateur.get();
+//		}
+//		else {
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+//		}
+//	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
