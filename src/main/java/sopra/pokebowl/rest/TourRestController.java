@@ -21,62 +21,62 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import sopra.pokebowl.model.Utilisateur;
+import sopra.pokebowl.model.Tour;
 import sopra.pokebowl.model.Views;
-import sopra.pokebowl.repository.IUtilisateurRepository;
+import sopra.pokebowl.repository.ITourRepository;
 
 @RestController
-@RequestMapping("/utilisateur")
+@RequestMapping("/tour")
 @CrossOrigin("*")
-public class UtilisateurRestController {
+public class TourRestController {
 
 	@Autowired
-	private IUtilisateurRepository utilisateurRepo;
+	private ITourRepository tourRepo;
 	
 	@GetMapping("")
-	@JsonView(Views.ViewUtilisateur.class)
-	public List<Utilisateur> findAll() {
-		return utilisateurRepo.findAll();
+	@JsonView(Views.ViewTour.class)
+	public List<Tour> findAll() {
+		return tourRepo.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur find(@PathVariable Long id) {
-		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findById(id);
+	@JsonView(Views.ViewTour.class)
+	public Tour find(@PathVariable Long id) {
+		Optional<Tour> opttour = tourRepo.findById(id);
 		
-		if(optUtilisateur.isPresent()) {
-			return optUtilisateur.get();
+		if(opttour.isPresent()) {
+			return opttour.get();
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 	}
 	
 	@PostMapping("")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur create(@Valid @RequestBody Utilisateur utilisateur, BindingResult result) {
+	@JsonView(Views.ViewTour.class)
+	public Tour create(@Valid @RequestBody Tour tour, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid");
 		}
 		
-		utilisateur = utilisateurRepo.save(utilisateur);
+		tour = tourRepo.save(tour);
 		
-		return utilisateur;
+		return tour;
 	}
 	
 	@PutMapping("/{id}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur update(@RequestBody Utilisateur utilisateur, @PathVariable Long id) {
-		if (!utilisateurRepo.existsById(id)) {
+	@JsonView(Views.ViewTour.class)
+	public Tour update(@RequestBody Tour tour, @PathVariable Long id) {
+		if (!tourRepo.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 		
-		utilisateur = utilisateurRepo.save(utilisateur);
+		tour = tourRepo.save(tour);
 		
-		return utilisateur;
+		return tour;
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		utilisateurRepo.deleteById(id);
+		tourRepo.deleteById(id);
 	}
 }

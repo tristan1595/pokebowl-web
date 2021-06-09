@@ -21,62 +21,62 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import sopra.pokebowl.model.Utilisateur;
+import sopra.pokebowl.model.Combat;
 import sopra.pokebowl.model.Views;
-import sopra.pokebowl.repository.IUtilisateurRepository;
+import sopra.pokebowl.repository.ICombatRepository;
 
 @RestController
-@RequestMapping("/utilisateur")
+@RequestMapping("/combat")
 @CrossOrigin("*")
-public class UtilisateurRestController {
+public class CombatRestController {
 
 	@Autowired
-	private IUtilisateurRepository utilisateurRepo;
+	private ICombatRepository combatRepo;
 	
 	@GetMapping("")
-	@JsonView(Views.ViewUtilisateur.class)
-	public List<Utilisateur> findAll() {
-		return utilisateurRepo.findAll();
+	@JsonView(Views.ViewCombat.class)
+	public List<Combat> findAll() {
+		return combatRepo.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur find(@PathVariable Long id) {
-		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findById(id);
+	@JsonView(Views.ViewCombat.class)
+	public Combat find(@PathVariable Long id) {
+		Optional<Combat> optCombat = combatRepo.findById(id);
 		
-		if(optUtilisateur.isPresent()) {
-			return optUtilisateur.get();
+		if(optCombat.isPresent()) {
+			return optCombat.get();
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 	}
 	
 	@PostMapping("")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur create(@Valid @RequestBody Utilisateur utilisateur, BindingResult result) {
+	@JsonView(Views.ViewCombat.class)
+	public Combat create(@Valid @RequestBody Combat combat, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid");
 		}
 		
-		utilisateur = utilisateurRepo.save(utilisateur);
+		combat = combatRepo.save(combat);
 		
-		return utilisateur;
+		return combat;
 	}
 	
 	@PutMapping("/{id}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur update(@RequestBody Utilisateur utilisateur, @PathVariable Long id) {
-		if (!utilisateurRepo.existsById(id)) {
+	@JsonView(Views.ViewCombat.class)
+	public Combat update(@RequestBody Combat combat, @PathVariable Long id) {
+		if (!combatRepo.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 		
-		utilisateur = utilisateurRepo.save(utilisateur);
+		combat = combatRepo.save(combat);
 		
-		return utilisateur;
+		return combat;
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		utilisateurRepo.deleteById(id);
+		combatRepo.deleteById(id);
 	}
 }

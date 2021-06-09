@@ -21,62 +21,62 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import sopra.pokebowl.model.Utilisateur;
+import sopra.pokebowl.model.Salon;
 import sopra.pokebowl.model.Views;
-import sopra.pokebowl.repository.IUtilisateurRepository;
+import sopra.pokebowl.repository.ISalonRepository;
 
 @RestController
-@RequestMapping("/utilisateur")
+@RequestMapping("/salon")
 @CrossOrigin("*")
-public class UtilisateurRestController {
+public class SalonRestController {
 
 	@Autowired
-	private IUtilisateurRepository utilisateurRepo;
+	private ISalonRepository salonRepo;
 	
 	@GetMapping("")
-	@JsonView(Views.ViewUtilisateur.class)
-	public List<Utilisateur> findAll() {
-		return utilisateurRepo.findAll();
+	@JsonView(Views.ViewSalon.class)
+	public List<Salon> findAll() {
+		return salonRepo.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur find(@PathVariable Long id) {
-		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findById(id);
+	@JsonView(Views.ViewSalon.class)
+	public Salon find(@PathVariable Long id) {
+		Optional<Salon> optSalon = salonRepo.findById(id);
 		
-		if(optUtilisateur.isPresent()) {
-			return optUtilisateur.get();
+		if(optSalon.isPresent()) {
+			return optSalon.get();
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 	}
 	
 	@PostMapping("")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur create(@Valid @RequestBody Utilisateur utilisateur, BindingResult result) {
+	@JsonView(Views.ViewSalon.class)
+	public Salon create(@Valid @RequestBody Salon salon, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid");
 		}
 		
-		utilisateur = utilisateurRepo.save(utilisateur);
+		salon = salonRepo.save(salon);
 		
-		return utilisateur;
+		return salon;
 	}
 	
 	@PutMapping("/{id}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur update(@RequestBody Utilisateur utilisateur, @PathVariable Long id) {
-		if (!utilisateurRepo.existsById(id)) {
+	@JsonView(Views.ViewSalon.class)
+	public Salon update(@RequestBody Salon salon, @PathVariable Long id) {
+		if (!salonRepo.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
 		
-		utilisateur = utilisateurRepo.save(utilisateur);
+		salon = salonRepo.save(salon);
 		
-		return utilisateur;
+		return salon;
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		utilisateurRepo.deleteById(id);
+		salonRepo.deleteById(id);
 	}
 }
