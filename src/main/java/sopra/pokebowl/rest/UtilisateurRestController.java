@@ -94,12 +94,6 @@ public class UtilisateurRestController {
 		}
 	}
 	
-	@GetMapping("/{pseudo}:{motDePasse}")
-	@JsonView(Views.ViewUtilisateur.class)
-	public Utilisateur findUtilisateurWithPseudoAndMotDePasse(@PathVariable String pseudo, @PathVariable String motDePasse) {
-		return utilisateurRepo.findByPseudoAndMotDePasse(pseudo, motDePasse);
-	}
-	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		utilisateurRepo.deleteById(id);
@@ -132,6 +126,7 @@ public class UtilisateurRestController {
 		}
 		
 	}
+	
 	@GetMapping("/by-pseudo/{pseudo}") 
 	@JsonView(Views.ViewUtilisateur.class)
 	
