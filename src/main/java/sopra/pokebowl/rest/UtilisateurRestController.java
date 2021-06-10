@@ -21,8 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import sopra.pokebowl.model.Equipe;
 import sopra.pokebowl.model.Utilisateur;
 import sopra.pokebowl.model.Views;
+import sopra.pokebowl.repository.IEquipeRepository;
 import sopra.pokebowl.repository.IUtilisateurRepository;
 
 @RestController
@@ -32,6 +34,9 @@ public class UtilisateurRestController {
 
 	@Autowired
 	private IUtilisateurRepository utilisateurRepo;
+	
+	@Autowired
+	private IEquipeRepository equipeRepo;
 	
 	@GetMapping("")
 	@JsonView(Views.ViewUtilisateur.class)
@@ -63,7 +68,7 @@ public class UtilisateurRestController {
 		return utilisateur;  
 	}
 	
-	@PutMapping("/id}{")
+	@PutMapping("/{id}")
 	@JsonView(Views.ViewUtilisateur.class)
 	public Utilisateur update(@RequestBody Utilisateur utilisateur, @PathVariable Long id) {
 		if (!utilisateurRepo.existsById(id)) {
@@ -75,21 +80,41 @@ public class UtilisateurRestController {
 		return utilisateur;
 	}
 	
-//	@GetMapping("/{id}/profil")
-//	@JsonView(Views.ViewUtilisateurDetail.class)
-//	public Utilisateur findUtilisateurAllInfo(@Valid @RequestBody Utilisateur utilisateur, BindingResult result, @PathVariable Long id) {
-//		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findUtilisateurByIdWithEquipesSauvegardeesAndStatistique(id);
-//		
-//		if(optUtilisateur.isPresent()) {
-//			return optUtilisateur.get();
-//		}
-//		else {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
-//		}
-//	}
+	@GetMapping("/{id}/profil")
+	@JsonView(Views.ViewUtilisateurDetail.class)
+	public Utilisateur findUtilisateurAllInfo(@PathVariable Long id) {
+		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findUtilisateurByIdWithEquipesSauvegardees(id);
+		
+		if(optUtilisateur.isPresent()) {
+			return optUtilisateur.get();
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+		}
+	}
+	
+	@GetMapping("/{pseudo}:{motDePasse}")
+	@JsonView(Views.ViewUtilisateur.class)
+	public Utilisateur findUtilisateurWithPseudoAndMotDePasse(@PathVariable String pseudo, @PathVariable String motDePasse) {
+		return utilisateurRepo.findByPseudoAndMotDePasse(pseudo, motDePasse);
+	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		utilisateurRepo.deleteById(id);
+	}
+	
+	@GetMapping("/{id}/equipes")
+	@JsonView(Views.ViewEquipeDetail.class)
+	public List<Equipe> findAllEquipeByUtilisateur(@PathVariable Long id) {
+		
+		Optional<List<Equipe>> optUtilisateur = equipeRepo.findEquipesByUtilisateurId(id);
+		
+		if(optUtilisateur.isPresent()) {
+			return optUtilisateur.get();
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+		}
 	}
 }
