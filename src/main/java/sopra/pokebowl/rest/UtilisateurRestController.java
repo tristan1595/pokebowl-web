@@ -26,6 +26,7 @@ import sopra.pokebowl.model.Utilisateur;
 import sopra.pokebowl.model.Views;
 import sopra.pokebowl.repository.IEquipeRepository;
 import sopra.pokebowl.repository.IUtilisateurRepository;
+import sopra.pokebowl.rest.dto.ConnexionDTO;
 
 @RestController
 @RequestMapping("/utilisateur")
@@ -116,5 +117,32 @@ public class UtilisateurRestController {
 		else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
 		}
+	}
+	
+	@PostMapping("/auth")
+	@JsonView(Views.ViewUtilisateur.class)
+	public Utilisateur findByPseudoAndMotDePasse(@RequestBody ConnexionDTO conn) {
+	
+		Optional<Utilisateur> optUtilisateur = utilisateurRepo.findByPseudoAndMotDePasse(conn.getPseudo(), conn.getMotDePasse());
+		
+		if (optUtilisateur.isPresent()) {
+			return optUtilisateur.get();
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+		}
+		
+	}
+	@GetMapping("/by-pseudo/{pseudo}") 
+	@JsonView(Views.ViewUtilisateur.class)
+	
+	public Utilisateur findByPseudo(@PathVariable String pseudo) {
+		return utilisateurRepo.findByPseudo(pseudo);
+	}
+	
+	@GetMapping("/by-email/{email}") 
+	@JsonView(Views.ViewUtilisateur.class)
+	
+	public Utilisateur findByEmail(@PathVariable String email) {
+		return utilisateurRepo.findByEmail(email);
 	}
 }
